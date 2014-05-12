@@ -439,6 +439,25 @@ class KmlFromStringTestCase( unittest.TestCase ):
         self.assertEqual(k.to_string(), k2.to_string())
 
 
+    def test_malformed_placemark(self):
+        doc="""<kml xmlns="http://www.opengis.net/kml/2.2">
+          <Placemark>
+            <name>Malformed placemark</name>
+            <description>I have funky coordinates with spaces.</description>
+            <Point>
+              <coordinates>129.5, 08.8,0</coordinates>
+            </Point>
+          </Placemark>
+        </kml>"""
+        k = kml.KML()
+        k.from_string(doc)
+        self.assertEqual(len(list(k.features())),1)
+        self.assertEqual(list(k.features())[0].name, "Malformed placemark")
+        k2 = kml.KML()
+        k2.from_string(k.to_string())
+        self.assertEqual(k.to_string(), k2.to_string())
+
+
     def test_extended_data(self):
         doc="""<kml xmlns="http://www.opengis.net/kml/2.2">
           <Placemark>

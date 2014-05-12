@@ -295,8 +295,14 @@ class Geometry(_BaseObject):
     def _get_coordinates(self, element):
         coordinates = element.find('%scoordinates' % self.ns)
         if coordinates is not None:
-            latlons = coordinates.text.strip().split()
+            if element.tag == ('%sPoint' % self.ns):
+               coords = coordinates.text.replace(' ', '')
+            else:
+               coords = coordinates.text
+
+            latlons = coords.strip().split()
             coords = []
+
             for latlon in latlons:
                 coords.append([float(c) for c in latlon.split(',')])
             return coords
