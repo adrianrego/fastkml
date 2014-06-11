@@ -324,7 +324,10 @@ class Geometry(_BaseObject):
         if element.tag == ('%sLineString' % self.ns):
             coords = self._get_coordinates(element)
             self._get_geometry_spec(element)
-            return LineString(coords)
+            if len(coords) >= 2:
+               return LineString(coords)
+            else:
+               return Point(coords[0])
         if element.tag == ('%sPolygon' % self.ns):
             self._get_geometry_spec(element)
             outer_boundary = element.find('%souterBoundaryIs' %self.ns)
