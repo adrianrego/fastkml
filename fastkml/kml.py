@@ -428,6 +428,7 @@ class _Feature(_BaseObject):
         if self.name:
             name = etree.SubElement(element, "%sname" %self.ns)
             name.text = self.name
+
         if self.description:
             description =etree.SubElement(element, "%sdescription" %self.ns)
             description.text = self.description
@@ -463,15 +464,16 @@ class _Feature(_BaseObject):
             element.append(self.extended_data.etree_element())
         return element
 
-
     def from_element(self, element):
         super(_Feature, self).from_element(element)
         name = element.find('%sname' %self.ns)
         if name is not None:
             self.name = name.text
+
         description = element.find('%sdescription' %self.ns)
         if description is not None:
-            self.description = description.text
+            self.description = description.text or list(description)[0].text
+
         visibility = element.find('%svisibility' %self.ns)
         if visibility is not None:
             self.visibility = int(visibility.text)
